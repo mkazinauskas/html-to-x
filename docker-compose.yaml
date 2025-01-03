@@ -1,0 +1,11 @@
+services:
+  html-to-x-api:
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    environment:
+      - NODE_ENV=production
+      - SHUTDOWN_ON_FAILED_PING=true

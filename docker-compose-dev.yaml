@@ -1,0 +1,13 @@
+services:
+  html-to-x-api-dev:
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile-dev
+    ports:
+      - 3000:3000
+    volumes:
+      - ./:/app/
+    environment:
+      - NODE_ENV=development
+      - SHUTDOWN_ON_FAILED_PING=false
