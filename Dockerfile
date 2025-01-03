@@ -51,8 +51,8 @@ ENV NEXT_TELEMETRY_DISABLED 1
 
 ENV NODE_OPTIONS="--max-old-space-size=800"
 
-# Note: Don't expose ports here, Compose will handle that for us
-
 EXPOSE 3000
 
-CMD ["node", "server.js"]
+ENV PORT 3000
+
+CMD HOSTNAME="0.0.0.0" node server.js
