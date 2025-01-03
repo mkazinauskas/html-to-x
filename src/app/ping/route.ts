@@ -1,4 +1,5 @@
 
+import { ConvertType } from "@/domain/convert-type";
 import { convert } from "@/domain/playwright-html-converter";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -14,7 +15,8 @@ export async function GET(request: NextRequest): Promise<NextResponse<HealthResp
     try {
         const result = await convert({
             html,
-            uniqueJobID: `${checkType} Check ${new Date().toISOString()}`
+            uniqueJobID: `${checkType} Check ${new Date().toISOString()}`,
+            convertType: ConvertType.PDF
         });
         const pdf = Buffer.from(result, "base64").toString();
         if (!pdf.length) {

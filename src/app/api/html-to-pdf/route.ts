@@ -39,7 +39,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<PdfRespon
     try {
         const html = Buffer.from(requestBody.base64EncodedHtml, "base64").toString();
 
-        const result = await convert({ html, uniqueJobID, convertType: ConvertType.PNG })
+        const result = await convert({ html, uniqueJobID, convertType: ConvertType.PDF })
 
         return NextResponse.json({
             base64EncodedPdf: result
