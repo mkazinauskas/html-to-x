@@ -7,22 +7,22 @@ import { convert } from "@/domain/playwright-html-converter";
 import ApplicationError from "@/domain/application-error";
 import { ConvertType } from "@/domain/convert-type";
 
-export type PdfRequest = {
-    base64EncodedHtml: string;
-};
+const RequestSchema = z.object({
+    base64EncodedHtml: z
+        .string({ description: "Base64 encoded HTML is required" })
+        .base64({ message: "Base64 encoded HTML is invalid" }),
+});
 
-export type PdfResponse = {
+export type Request = z.infer<typeof RequestSchema>;
+
+export type Response = {
     base64EncodedPdf: string;
 };
 
-const RequestSchema = z.object({
-    base64EncodedHtml: z.string({ description: "Base64 encoded HTML" }),
-});
-
-export async function POST(request: NextRequest): Promise<NextResponse<PdfResponse | ValidationErrorResponse | ApplicationErrorResponse>> {
+export async function POST(request: NextRequest): Promise<NextResponse<Response | ValidationErrorResponse | ApplicationErrorResponse>> {
     const uniqueJobID = crypto.randomUUID()
     console.log(`${uniqueJobID}: Received request`);
-    const requestBody: PdfRequest = await request.json();
+    const requestBody: Request = await request.json();
 
     const response = RequestSchema.safeParse(requestBody);
 
@@ -43,7 +43,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<PdfRespon
 
         return NextResponse.json({
             base64EncodedPdf: result
-        } as PdfResponse, { status: 200 })
+        } as Response, { status: 200 })
 
     } catch (e: Error | unknown) {
         if (e instanceof ApplicationError) {

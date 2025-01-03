@@ -6,7 +6,7 @@ import PQueue from 'p-queue';
 import ApplicationError from './application-error';
 import { ConvertType } from './convert-type';
 
-const queue: PQueue = new PQueue({ concurrency: 3 });
+const queue: PQueue = new PQueue({ concurrency: 10 });
 
 const headerTemplate: string = '<html> <head> <style type="text/css"> #header{padding: 0;}.content{width: 100%; margin: 5px; padding-top:5px; -webkit-print-color-adjust: exact; vertical-align: middle; font-size: 15px; display: inline-block; text-align: center;}</style> </head> <body> <div class="content"> <span class="title"></span> - <span class="date"></span> </div></body></html>'
 
