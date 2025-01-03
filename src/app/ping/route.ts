@@ -2,6 +2,7 @@
 import { ConvertType } from "@/domain/convert-type";
 import { convert } from "@/domain/playwright-html-converter";
 import { NextRequest, NextResponse } from "next/server";
+import { sampleHtml } from "./sample-html";
 
 export type HealthResponse = {
     status: string;
@@ -10,26 +11,25 @@ export type HealthResponse = {
 export async function GET(request: NextRequest): Promise<NextResponse<HealthResponse>> {
     const checkType = request.nextUrl.searchParams.get('type') ?? 'Undefined Health'
 
-    const html = '<h1>Hello World!</h1>';
-
     try {
         const result = await convert({
-            html,
+            html: sampleHtml,
             uniqueJobID: `${checkType} Check ${new Date().toISOString()}`,
             convertType: ConvertType.PDF
         });
         const pdf = Buffer.from(result, "base64").toString();
         if (!pdf.length) {
-            console.log('PDF has no lenght')
+            console.error('PDF has no length')
             return fail()
         }
         if (pdf.length < 10000) {
-            console.log('PDF has leght less than 10000')
+            console.error('PDF has leght less than 10000')
             return fail()
         }
+        console.log('Ping was successfull')
         return ok()
     } catch (e) {
-        console.error(e)
+        console.error('Ping failed: ', e)
         return fail()
     }
 }
