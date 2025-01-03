@@ -1,0 +1,10 @@
+
+services:
+  html-to-x-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3030:3000
+    environment:
+      - NODE_ENV=production

@@ -1,0 +1,9 @@
+Dockerfile
+.git
+.gitignore
+README.md
+LICENSE
+.vscode
+node_modules
+npm-debug.log
+yarn-error.log
