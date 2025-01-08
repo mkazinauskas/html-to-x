@@ -7,7 +7,6 @@ on:
     branches: [ "main" ]
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
 
@@ -45,19 +44,3 @@ jobs:
       uses: sudo-bot/action-docker-compose@latest
       with:
         cli-args: "kill"   
-    - 
-      name: Login to Docker Hub
-      uses: docker/login-action@v3
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}      
-    - 
-      name: Get current date
-      id: date
-      run: echo "date=$(date +'%Y-%m-%d_%H-%M-%S')" >> $GITHUB_OUTPUT
-    -
-      name: Build and push
-      uses: docker/build-push-action@v6
-      with:
-        push: true
-        tags: mkazinauskas/html-to-x:${{ steps.date.outputs.date }},mkazinauskas/html-to-x:latest
