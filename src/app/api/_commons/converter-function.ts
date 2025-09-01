@@ -28,11 +28,11 @@ export async function convertHtml<REQ, RES>(
     const validatedRequest = requestSchema.safeParse(requestJson)
 
     if (!validatedRequest.success) {
-        const { errors } = validatedRequest.error
+        const { issues } = validatedRequest.error
 
         return NextResponse.json(
             {
-                error: { message: 'Invalid request', errors },
+                error: { message: 'Invalid request', errors: issues },
             } as ValidationErrorResponse,
             { status: 400 }
         )
