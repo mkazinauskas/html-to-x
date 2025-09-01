@@ -32,8 +32,7 @@ export async function convertHtmlToType(
 }
 
 async function convertWithPlaywright({ html, convertType }: { html: string, convertType: ConvertType }): Promise<string> {
-    let browser: Browser | undefined = undefined
-    let page: Page
+    let browser: Browser | undefined
 
     try {
         browser = await chromium.launch({
@@ -41,7 +40,7 @@ async function convertWithPlaywright({ html, convertType }: { html: string, conv
             args: ['--arcvm-use-hugepages']
         })
 
-        page = await browser.newPage()
+        const page: Page = await browser.newPage()
         await page.setContent(html)
         return await convertToType({ page, convertType })
     } catch (error) {
@@ -49,7 +48,7 @@ async function convertWithPlaywright({ html, convertType }: { html: string, conv
         throw new ApplicationError('Failed to convert hrml to ' + convertType)
     } finally {
         try {
-            if (browser) {
+            if (browser && browser.isConnected()) {
                 await browser.close()
             }
         } catch (error) {

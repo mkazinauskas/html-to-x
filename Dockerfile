@@ -34,9 +34,14 @@ RUN npm run build
 # Note: It is not necessary to add an intermediate step that does a full copy of `node_modules` here
 
 # Step 2. Production image, copy all the files and run next
-FROM mcr.microsoft.com/playwright:v1.49.1-noble AS runner
+FROM mcr.microsoft.com/playwright:v1.55.0-noble AS runner
 
 WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends tini \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
 # Don't run production as root
 RUN addgroup --system --gid 1002 nodejs
 RUN adduser --system --uid 1002 nextjs
@@ -62,4 +67,5 @@ ENV PORT=3000
 # https://nextjs.org/docs/pages/api-reference/config/next-config-js/output
 ENV HOSTNAME="0.0.0.0"
 
-CMD ["node", "server.js"]
+# Using tini to avoid zombie <defunct> chrome processes
+CMD ["tini", "--", "node", "server.js"]
